@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import com.esempio.ChessTournamentOnline.Entity.Utente;
+import com.esempio.ChessTournamentOnline.dto.LoginResponse;
 import com.esempio.ChessTournamentOnline.security.JwtUtil;
 import com.esempio.ChessTournamentOnline.service.UtenteService;
 
@@ -24,15 +25,29 @@ public class AuthController {
         return ResponseEntity.ok(saved);
     }
 
+//    @PostMapping("/login")
+//    public ResponseEntity<String> login(@RequestBody Utente loginRequest) {
+//        return utenteService.findByUsername(loginRequest.getUsername())
+//                .filter(u -> loginRequest.getPassword() != null)
+//                .map(u -> {
+//                    // Password check
+//                	if (passwordEncoder.matches(loginRequest.getPassword(), u.getPassword())) {
+//                        String token = jwtUtil.generateToken(u.getUsername(), u.getRuolo().name());
+//                        return ResponseEntity.ok(token);
+//                    }
+//                    return ResponseEntity.status(401).body("Invalid credentials");
+//                })
+//                .orElse(ResponseEntity.status(401).body("User not found"));
+//    }
+    
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Utente loginRequest) {
+    public ResponseEntity<?> login(@RequestBody Utente loginRequest) {
         return utenteService.findByUsername(loginRequest.getUsername())
                 .filter(u -> loginRequest.getPassword() != null)
                 .map(u -> {
-                    // Password check
-                	if (passwordEncoder.matches(loginRequest.getPassword(), u.getPassword())) {
+                    if (passwordEncoder.matches(loginRequest.getPassword(), u.getPassword())) {
                         String token = jwtUtil.generateToken(u.getUsername(), u.getRuolo().name());
-                        return ResponseEntity.ok(token);
+                        return ResponseEntity.ok(new LoginResponse(u.getUsername(), token));
                     }
                     return ResponseEntity.status(401).body("Invalid credentials");
                 })
