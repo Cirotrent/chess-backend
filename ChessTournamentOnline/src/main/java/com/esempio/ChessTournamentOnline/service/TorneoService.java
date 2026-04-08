@@ -21,7 +21,8 @@ public class TorneoService {
     public List<Torneo> getTornei(Utente utente) {
 
         if (utente.getRuolo() == Utente.Ruolo.ORGANIZER) {
-            return torneoRepository.findByUtenteCreazione(utente);
+        	List<Torneo> res = torneoRepository.findByUtenteCreazione(utente);
+            return res;
         }else if  (utente.getRuolo() == Utente.Ruolo.PLAYER) {
         	return torneoRepository.findByEloMinimoLessThanEqual(utente.getEloRating());
         }

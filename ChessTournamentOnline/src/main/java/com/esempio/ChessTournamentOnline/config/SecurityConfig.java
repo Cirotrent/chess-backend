@@ -26,7 +26,7 @@ public class SecurityConfig {
 	        	    .requestMatchers("/admin/**").hasRole("ADMIN")
 	        	    .requestMatchers("/organizer/**").hasAnyRole("ADMIN", "ORGANIZER")
 	        	    .requestMatchers("/tornei/**").hasAnyRole("ADMIN", "ORGANIZER")
-	        	    .requestMatchers("/play/**").hasRole("PLAYER")
+	        	    .requestMatchers("/play/**").hasAnyRole("PLAYER","ADMIN", "ORGANIZER")
 	        	    .anyRequest().authenticated()
 	        )
 	        .exceptionHandling(ex -> ex

@@ -31,6 +31,7 @@ public class PlayController {
     private final UtenteService utenteService;
     private final TorneoService torneoService;
 
+    
     private Utente getUtente() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return utenteService.findByUsername(username).orElseThrow();
@@ -54,8 +55,9 @@ public class PlayController {
     }
 
     @PostMapping("/iscriviti/{id}")
-    public String iscrizione(@PathVariable Long id) {
-        return playService.iscriviti(getUtente(), id);
+    public Map<String, String> iscrizione(@PathVariable Long id) {
+        String msg = playService.iscriviti(getUtente(), id);
+        return Map.of("message", msg);
     }
 
     @PostMapping("/gioca/{id}")
@@ -65,8 +67,9 @@ public class PlayController {
     
     @GetMapping("/lista-tornei")
     public List<Torneo> listaTornei() {
-        return torneoService.getTorneiPlayer(getUtenteLoggato());
+        return torneoService.getTorneiPlayer(getUtente());
     }
+    @GetMapping
     private Utente getUtenteLoggato() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return utenteService.findByUsername(username).orElseThrow();

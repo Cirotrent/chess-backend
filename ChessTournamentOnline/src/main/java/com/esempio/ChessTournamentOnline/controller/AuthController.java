@@ -46,8 +46,9 @@ public class AuthController {
                 .filter(u -> loginRequest.getPassword() != null)
                 .map(u -> {
                     if (passwordEncoder.matches(loginRequest.getPassword(), u.getPassword())) {
+                    	String ruolo = u.getRuolo().name();
                         String token = jwtUtil.generateToken(u.getUsername(), u.getRuolo().name());
-                        return ResponseEntity.ok(new LoginResponse(u.getUsername(), token));
+                        return ResponseEntity.ok(new LoginResponse(u.getUsername(), token, ruolo,u.getMontePremi(), u.getEloRating()));
                     }
                     return ResponseEntity.status(401).body("Invalid credentials");
                 })
